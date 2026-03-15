@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
 function Cart(){
 
@@ -21,11 +22,16 @@ return(
 <h3>Cart is empty</h3>
 ) : (
 
-cart.map((item)=> (
+<>
 
-<div className="cart-item">
+{cart.map((item)=> (
 
-<img src={item.image} alt="" />
+<div key={item._id} className="cart-item">
+
+<img
+src={`http://localhost:5000/uploads/${item.image}`}
+alt={item.name}
+/>
 
 <div className="cart-details">
 
@@ -54,11 +60,19 @@ Remove
 
 </div>
 
-))
-
-)}
+))}
 
 <h2>Total: ₹ {total}</h2>
+
+<Link to="/checkout">
+<button className="checkout-btn">
+Proceed to Checkout
+</button>
+</Link>
+
+</>
+
+)}
 
 </div>
 

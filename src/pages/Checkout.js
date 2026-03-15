@@ -1,69 +1,59 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
-function Cart(){
+function Checkout() {
 
-const { cart, removeFromCart, increaseQty, decreaseQty } =
-useContext(CartContext);
+  const { cart } = useContext(CartContext);
+  const navigate = useNavigate();
 
-const total = cart.reduce(
-(sum,item)=> sum + item.price * item.quantity,
-0
-);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-return(
+  return (
 
-<div className="cart-page">
+    <div className="checkout-page">
 
-<h2>Your Cart</h2>
+      <h2>Checkout</h2>
 
-{cart.length === 0 ? (
-<h3>Cart is empty</h3>
-) : (
+      {cart.map(item => (
 
-cart.map((item)=> (
+        <div key={item._id} className="checkout-item">
 
-<div className="cart-item">
+          <img
+            src={`/uploads/${item.image}`}   // ✅ FIXED
+            alt={item.name}
+            style={{ width: "100px" }}
+          />
 
-<img src={item.image} alt="" />
+          <div>
 
-<div className="cart-details">
+            <h3>{item.name}</h3>
 
-<h3>{item.name}</h3>
+            <p>₹ {item.price}</p>
 
-<p>₹ {item.price}</p>
+            <p>Quantity: {item.quantity}</p>
 
-<div className="qty">
+          </div>
 
-<button onClick={()=>decreaseQty(item._id)}>-</button>
+        </div>
 
-<span>{item.quantity}</span>
+      ))}
 
-<button onClick={()=>increaseQty(item._id)}>+</button>
+      <h2>Total Amount: ₹ {total}</h2>
 
-</div>
+      <button
+        onClick={() => navigate("/payment")}
+        className="checkout-btn"
+      >
+        Proceed to Payment
+      </button>
 
-<button
-onClick={()=>removeFromCart(item._id)}
-className="delete-btn"
->
-Remove
-</button>
+    </div>
 
-</div>
-
-</div>
-
-))
-
-)}
-
-<h2>Total: ₹ {total}</h2>
-
-</div>
-
-)
-
+  );
 }
 
-export default Cart;
+export default Checkout;

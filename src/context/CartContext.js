@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (product) => {
-
+    console.log("PRODUCT ADDED:",product);
     const exist = cart.find((item) => item._id === product._id);
 
     if (exist) {

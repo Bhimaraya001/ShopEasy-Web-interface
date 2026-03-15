@@ -5,31 +5,41 @@ function AddProduct() {
 
   const [product, setProduct] = useState({
     name: "",
-    image: "",
     description: "",
     category: "",
     price: ""
   });
 
+  const [image, setImage] = useState(null);
+
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleImage = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    axios.post("http://localhost:5000/add-product", product)
-      .then(() => {
-        alert("Product Added Successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("category", product.category);
+    formData.append("price", product.price);
+    formData.append("image", image);
+
+    await axios.post("http://localhost:5000/add-product", formData);
+
+    alert("Product Added");
 
   };
 
   return (
+
     <div>
 
       <h2>Add Product</h2>
@@ -44,10 +54,8 @@ function AddProduct() {
         />
 
         <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          onChange={handleChange}
+          type="file"
+          onChange={handleImage}
         />
 
         <input
@@ -76,6 +84,7 @@ function AddProduct() {
       </form>
 
     </div>
+
   );
 }
 
